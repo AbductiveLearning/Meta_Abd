@@ -1,0 +1,14 @@
+* Requirement
+The codes are only tested under Linux with following packages:
+- PyTorch 1.6.0 with cuda
+- Torchvision 0.7.0
+- SWI-Prolog 8.3.6
+* Experiments
+1. MNIST cumulative sum:
+   #+begin_src shell
+     cd python; python -u run_sum.py
+   #+end_src
+2. MNIST cumulative product:
+   #+begin_src shell
+     cd python; python -u run_product.py
+   #+end_src
