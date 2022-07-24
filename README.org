@@ -1,8 +1,7 @@
 * About
 This repository contains the codes for $Meta_{Abd}$, which is described in a [[https://www.ijcai.org/proceedings/2021/254][paper]] published in IJCAI 2021:
-#+begin_src
-Wang-Zhou Dai, Stephen Muggleton. Abductive Knowledge Induction from Raw Data. Proceedings of the Thirtieth International Joint Conference on Artificial Intelligence. pp. 1845-1851.
-#+end_src
+- Wang-Zhou Dai, Stephen Muggleton. Abductive Knowledge Induction from Raw Data. Proceedings of the Thirtieth International Joint Conference on Artificial Intelligence. pp. 1845-1851.
+
 * Requirement
 The codes are only tested under Linux with following packages:
 - PyTorch 1.6.0 with cuda
