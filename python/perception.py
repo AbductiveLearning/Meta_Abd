@@ -16,11 +16,11 @@ def conv_net(outdim, *args, **kwargs):
         nn.Conv2d(32, 64, 3, 1),
         nn.ReLU(),
         nn.MaxPool2d(2),
-        nn.Dropout2d(0.25),
+        nn.Dropout(0.25),
         Flatten(),
         nn.Linear(9216, 128),
         nn.ReLU(),
-        nn.Dropout2d(0.5),
+        nn.Dropout(0.5),
         nn.Linear(128, outdim),
         nn.LogSoftmax(dim=1)
     )

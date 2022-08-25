@@ -122,7 +122,7 @@ async def train_abduce(batches, model, optimizer, scheduler,
             acc = acc + 1
     print("\nAbduced Label Acc: {}".format(acc/len(train_img_indices)))
 
-    sup_imgs_train = torch.utils.data.Subset(train_img_data, train_img_indices)
+    sup_imgs_train = torch.utils.data.Subset(train_img_data, train_img_indices) # only use the successfuly abduced labels
     sup_train_loader = torch.utils.data.DataLoader(sup_imgs_train, **kwargs)
     sup_test_loader = torch.utils.data.DataLoader(test_img_data, **kwargs)
 
@@ -229,6 +229,10 @@ def train_abduce_concurrent(loop, sem, batches, model, optimizer, scheduler,
             # if anything wrong happend, just skip this batch
             continue
 
+    print("\nMost Frequent Program:")
+    print(most_common(progs), end="")
+    print("Successfully abduced batches: {}/{}".format(succ, len(batches)))
+
     # Change the targets of training images
     acc = 0
     for i, img in enumerate(train_img_indices):
@@ -236,9 +240,6 @@ def train_abduce_concurrent(loop, sem, batches, model, optimizer, scheduler,
         if train_img_targets[i] == train_img_labels[img]:
             acc = acc + 1
 
-    print("\nMost Frequent Program:")
-    print(most_common(progs), end="")
-    print("Successfully abduced batches: {}/{}".format(succ, len(batches)))
     print("Abduced label Acc: {}".format(acc/len(train_img_indices)))
 
     sup_imgs_train = torch.utils.data.Subset(train_img_data, train_img_indices)
@@ -246,7 +247,7 @@ def train_abduce_concurrent(loop, sem, batches, model, optimizer, scheduler,
     sup_test_loader = torch.utils.data.DataLoader(test_img_data, **kwargs)
 
     # Update neural model
-    for epoch in range(1, epochs):
+    for epoch in range(0, epochs):
         train(model, device, sup_train_loader,
               optimizer, epoch, log_interval)
         test(model, device, sup_test_loader)

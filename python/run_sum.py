@@ -10,7 +10,6 @@ from learn import sample_curriculums, train_abduce_concurrent
 from data import load_mnist, group_mnist
 from perception import Net, train
 
-
 def weights_init(m):
     if isinstance(m, torch.nn.Conv2d):
         torch.nn.init.xavier_normal_(m.weight)
@@ -63,7 +62,7 @@ def main():
     n_labels = 10  # number of labels
 
     ONE_SHOT_PRETRAIN = False
-    seed = 100
+    seed = 2
     torch.manual_seed(seed)
 
     file_name = data_path + task_name + '.yaml'
@@ -88,12 +87,13 @@ def main():
     # Learning with abduction
     EPOCHS = 100
     N_BATCHES = 3000
-    N_CORES = 6  # number of parallel abductions
-    NN_EPOCHS = 2
+    N_CORES = 30  # number of parallel abductions
+    NN_EPOCHS = 1
     LR = 0.005
     GAMMA = 1.0
     LOG_INTERVAL = 500
-    NUM_WORKERS = 20
+    NUM_WORKERS = 32
+    BATCH_VARS = 7 # maximum number of variables in abduction
 
     kwargs = {'batch_size': 64}
     kwargs.update({'num_workers': NUM_WORKERS,
@@ -115,7 +115,7 @@ def main():
             print("======\nEpoch {}\n======".format(T))
             # new batch assignment to break the dependency
             batches = sample_curriculums(
-                examples, 7, n_batches=N_BATCHES, shuffle=True)
+                examples, BATCH_VARS, n_batches=N_BATCHES, shuffle=True)
             train_abduce_concurrent(loop, sem, batches, p_model,
                                     optimizer, scheduler,
                                     label_names, examples,
