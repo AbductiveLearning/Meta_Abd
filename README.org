@@ -4,9 +4,9 @@ This repository contains the codes for $Meta_{Abd}$, which is described in a [[h
 
 * Requirement
 The codes are only tested under Linux with following packages:
-- PyTorch 1.6.0 with cuda
-- Torchvision 0.7.0
-- SWI-Prolog 8.3.6
+- PyTorch 1.12.1 with cuda
+- Torchvision 0.13.1
+- SWI-Prolog 8.5.10
 * Running the codes
 1. MNIST cumulative sum:
    #+begin_src shell
