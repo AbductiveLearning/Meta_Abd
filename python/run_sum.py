@@ -62,7 +62,9 @@ def main():
     n_labels = 10  # number of labels
 
     ONE_SHOT_PRETRAIN = False
-    seed = 2
+    # For reproductivity
+    seed = 1
+    random.seed(seed)
     torch.manual_seed(seed)
 
     file_name = data_path + task_name + '.yaml'
@@ -87,9 +89,10 @@ def main():
     # Learning with abduction
     EPOCHS = 100
     N_BATCHES = 3000
-    N_CORES = 30  # number of parallel abductions
+    N_CORES = 32  # number of parallel abductions
     NN_EPOCHS = 1
-    LR = 0.005
+    LR = 0.01
+    r = 0.005 # speed for adapting learning rate
     GAMMA = 1.0
     LOG_INTERVAL = 500
     NUM_WORKERS = 32
@@ -104,14 +107,16 @@ def main():
     if ONE_SHOT_PRETRAIN:
         one_shot_pretrain(p_model, imgs_train, **kwargs)
 
-    optimizer = optim.Adam(p_model.parameters(), lr=LR)
-    scheduler = StepLR(optimizer, step_size=1, gamma=GAMMA)
-
     sem = asyncio.Semaphore(N_CORES)
     loop = asyncio.get_event_loop()
 
     try:
         for T in range(EPOCHS):
+            lr_t = LR*(1 + r)**T # increase learning rate during iteration
+
+            optimizer = optim.SGD(p_model.parameters(), lr=lr_t)
+            scheduler = StepLR(optimizer, step_size=1, gamma=GAMMA)
+
             print("======\nEpoch {}\n======".format(T))
             # new batch assignment to break the dependency
             batches = sample_curriculums(
